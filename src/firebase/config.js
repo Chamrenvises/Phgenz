@@ -10,8 +10,8 @@ const firebaseConfig = {
   projectId: "wtc-project-e36a8",
   storageBucket: "wtc-project-e36a8.firebasestorage.app",
   messagingSenderId: "368797693253",
-  appId: "1:368797693253:web:f123daf483f316e8aefa2c",
-  measurementId: "G-C1WMP9YC8S",
+  appId: "1:368797693253:web:fe032cefe17bc49daefa2c",
+  measurementId: "G-SL1V1BC5BC",
 };
 
 export const firebaseConfigured = Object.values(firebaseConfig).every(Boolean);

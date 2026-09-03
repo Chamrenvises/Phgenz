@@ -22,6 +22,10 @@ import ForgotPassword from "./pages/admin/ForgotPassword";
 import Dashboard from "./pages/admin/Dashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
 
+const routerBasename = import.meta.env.BASE_URL === "/"
+  ? undefined
+  : import.meta.env.BASE_URL.replace(/\/$/, "");
+
 function PublicLayout({ children }) {
   return (
     <>
@@ -38,7 +42,7 @@ export default function App() {
   return (
     <AuthProvider>
       <CartProvider>
-        <BrowserRouter basename="/WTC_Project">
+        <BrowserRouter basename={routerBasename}>
           <CartDrawer />
           <Routes>
             {/* Public pages */}
