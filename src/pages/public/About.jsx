@@ -72,7 +72,7 @@ export default function About() {
             <div className="relative">
               <div className="h-96 w-full rounded-[24px] overflow-hidden bg-[#f5f5f7]">
                 <img
-                  src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=1000&auto=format&fit=crop&q=80"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLB-1dlG4zcCp_bamcvGlV_CMZgw77EA5T_Pofhxe--w&s"
                   alt="PhoneGenZ Store"
                   className="w-full h-full object-cover"
                 />
