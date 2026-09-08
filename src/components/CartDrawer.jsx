@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
-import { HiX, HiTrash, HiPlus, HiMinus, HiArrowRight, HiShoppingBag, HiShieldCheck, HiCheck } from "react-icons/hi";
+import { HiX, HiTrash, HiPlus, HiMinus, HiArrowRight, HiShoppingBag, HiCheck } from "react-icons/hi";
 import { toast } from "react-toastify";
 import { purchaseProducts } from "../data/productsData";
 
@@ -191,7 +191,7 @@ export default function CartDrawer() {
                     )}
                   </div>
 
-                  <div className="rounded-lg bg-black/20 px-3 py-2 text-center text-xs text-slate-300">
+                  <div className="rounded-lg border border-white/10 px-3 py-2 text-center text-xs text-slate-300">
                     Total to pay: <span className="font-bold text-white">${subtotal.toLocaleString()}</span>
                   </div>
 
@@ -219,10 +219,6 @@ export default function CartDrawer() {
                 </div>
               )}
 
-              <div className="flex items-center justify-center gap-2 text-[11px] text-slate-400 pt-2">
-                <HiShieldCheck className="text-indigo-400 text-sm" />
-                <span>256-Bit SSL Encrypted Safe Checkout</span>
-              </div>
             </div>
           )}
         </div>
