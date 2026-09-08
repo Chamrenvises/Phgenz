@@ -1,11 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
-import { HiX, HiTrash, HiPlus, HiMinus, HiArrowRight, HiShoppingBag, HiShieldCheck } from "react-icons/hi";
+import { HiX, HiTrash, HiPlus, HiMinus, HiArrowRight, HiShoppingBag, HiShieldCheck, HiCheck } from "react-icons/hi";
 import { toast } from "react-toastify";
 import { purchaseProducts } from "../data/productsData";
 
 export default function CartDrawer() {
   const { cart, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, clearCart, subtotal, totalCount } = useCart();
+  const [showPayment, setShowPayment] = useState(false);
+  const [qrAvailable, setQrAvailable] = useState(true);
 
   useEffect(() => {
     if (!isCartOpen) return;
@@ -18,22 +20,28 @@ export default function CartDrawer() {
 
   if (!isCartOpen) return null;
 
-  async function handleCheckout() {
+  async function handlePaymentSubmitted() {
     try {
       await purchaseProducts(cart);
       toast.success("Order placed successfully! Thank you for shopping with PhoneGenZ.");
       clearCart();
+      setShowPayment(false);
       setIsCartOpen(false);
     } catch (error) {
       toast.error(error.message || "Could not complete your order. Please try again.");
     }
   }
 
+  function handleClose() {
+    setShowPayment(false);
+    setIsCartOpen(false);
+  }
+
   return (
     <div className="fixed inset-0 z-[40] overflow-hidden pointer-events-none">
       <div
         className="absolute inset-0 bg-black/75 backdrop-blur-sm transition-opacity pointer-events-auto"
-        onClick={() => setIsCartOpen(false)}
+        onClick={handleClose}
       />
 
       <div className="absolute inset-y-0 right-0 top-[4.75rem] w-full max-w-md pointer-events-auto">
@@ -50,7 +58,7 @@ export default function CartDrawer() {
               </div>
             </div>
             <button
-              onClick={() => setIsCartOpen(false)}
+              onClick={handleClose}
               className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors"
             >
               <HiX className="text-2xl" />
@@ -150,20 +158,66 @@ export default function CartDrawer() {
                 </div>
               </div>
 
-              <div className="space-y-2 pt-2">
-                <button
-                  onClick={handleCheckout}
-                  className="btn-primary w-full justify-center text-sm py-3.5 flex items-center gap-2 shadow-xl shadow-indigo-600/30"
-                >
-                  Proceed to Checkout <HiArrowRight />
-                </button>
-                <button
-                  onClick={clearCart}
-                  className="text-xs text-slate-500 hover:text-red-400 text-center w-full py-1 transition-colors"
-                >
-                  Empty Cart
-                </button>
-              </div>
+              {showPayment ? (
+                <div className="space-y-4 rounded-2xl border border-emerald-400/20 bg-emerald-400/5 p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="text-sm font-bold text-white">Pay with KHQR</h3>
+                      <p className="mt-1 text-xs leading-5 text-slate-400">
+                        Scan the QR code with your banking app, then confirm below after payment.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setShowPayment(false)}
+                      className="p-1 text-slate-400 hover:text-white"
+                      aria-label="Close KHQR payment"
+                    >
+                      <HiX />
+                    </button>
+                  </div>
+
+                  <div className="mx-auto flex min-h-48 max-w-56 items-center justify-center rounded-xl bg-white p-3">
+                    {qrAvailable ? (
+                      <img
+                        src="/khqr.png"
+                        alt="PhoneGenZ KHQR payment code"
+                        className="h-auto w-full"
+                        onError={() => setQrAvailable(false)}
+                      />
+                    ) : (
+                      <p className="text-center text-xs font-semibold text-slate-700">
+                        Add your KHQR image as public/khqr.png
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="rounded-lg bg-black/20 px-3 py-2 text-center text-xs text-slate-300">
+                    Total to pay: <span className="font-bold text-white">${subtotal.toLocaleString()}</span>
+                  </div>
+
+                  <button
+                    onClick={handlePaymentSubmitted}
+                    className="btn-primary w-full justify-center text-sm py-3 flex items-center gap-2 bg-emerald-600 border-emerald-600 hover:bg-emerald-500"
+                  >
+                    I Have Paid <HiCheck />
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2 pt-2">
+                  <button
+                    onClick={() => setShowPayment(true)}
+                    className="btn-primary w-full justify-center text-sm py-3.5 flex items-center gap-2 shadow-xl shadow-indigo-600/30"
+                  >
+                    Proceed to Checkout <HiArrowRight />
+                  </button>
+                  <button
+                    onClick={clearCart}
+                    className="text-xs text-slate-500 hover:text-red-400 text-center w-full py-1 transition-colors"
+                  >
+                    Empty Cart
+                  </button>
+                </div>
+              )}
 
               <div className="flex items-center justify-center gap-2 text-[11px] text-slate-400 pt-2">
                 <HiShieldCheck className="text-indigo-400 text-sm" />
